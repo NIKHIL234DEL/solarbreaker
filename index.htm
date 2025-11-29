@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Tracker & Smart Speed Breaker - CCA Project</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Config for Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        solar: { 100: '#fef9c3', 500: '#eab308', 600: '#ca8a04' }, // Yellow/Gold
+                        eco: { 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 900: '#14532d' }, // Green
+                        tech: { 50: '#f8fafc', 800: '#1e293b', 900: '#0f172a' }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Interactive Card Styling */
+        .interactive-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #22c55e; /* Eco Green */
+        }
+
+        .interactive-card:active {
+            transform: translateY(0);
+        }
+
+        /* Range Input Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #4d7c0f;
+            margin-top: -4px;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border-radius: 4px;
+        }
+
+        /* Speed Slider Specific */
+        #in_Speed::-webkit-slider-thumb {
+            background: #ef4444; /* Red for speed */
+        }
+        
+        /* Circuit Line Styling */
+        .circuit-line {
+            position: absolute;
+            background-color: #94a3b8;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="bg-tech-50 text-tech-800 font-sans leading-relaxed">
+
+    <!-- Navigation -->
+    <nav class="bg-tech-900 text-white sticky top-0 z-50 shadow-lg border-b-4 border-eco-500">
+        <div class="container mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl animate-pulse-slow">☀️</span>
+                <h1 class="font-bold text-lg tracking-wide">NIT Jamshedpur <span class="hidden sm:inline text-xs bg-eco-600 text-white px-2 py-0.5 rounded ml-2">CCA Project</span></h1>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="flex space-x-4 text-sm font-medium">
+                    <a href="#logic" class="hover:text-eco-500 transition-colors">Simulations</a>
+                    <a href="#components" class="hover:text-eco-500 transition-colors">Hardware</a>
+                    <a href="#learning" class="hover:text-eco-500 transition-colors">Docs</a>
+                    <a href="#team" class="hover:text-eco-500 transition-colors">Team</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="container mx-auto px-4 py-16 text-center">
+            <div class="inline-block px-3 py-1 mb-4 text-xs font-bold tracking-wider text-eco-700 uppercase bg-eco-100 rounded-full">
+                Renewable Energy & Road Safety
+            </div>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-tech-900 mb-6 leading-tight">
+                Single Axis Solar Tracker<br>
+                <span class="text-eco-600 text-2xl md:text-4xl">& Speed Sensing Speed Breaker</span>
+            </h2>
+            <p class="text-lg text-gray-600 mb-10 max-w-3xl mx-auto">
+                A dual-purpose innovation: Maximizing solar energy efficiency by 20-30% using active tracking, and enhancing road safety with Arduino-powered automated speed detection.
+            </p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12 space-y-24">
+
+        <!-- 1. LEARNING OUTCOMES & DOCUMENTATION -->
+        <section id="learning" class="max-w-6xl mx-auto scroll-mt-24">
+            <div class="flex items-center space-x-4 mb-12">
+                <div class="w-1.5 h-12 bg-solar-500 rounded-full"></div>
+                <div>
+                    <h3 class="text-4xl font-bold text-tech-900">Project Journey & Methodology</h3>
+                    <p class="text-lg text-gray-500">A Comprehensive Analysis: From Conceptualization to Prototype Execution</p>
+                </div>
+            </div>
+
+            <div class="space-y-16">
+                
+                <!-- 1. TOPIC SELECTION -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start border-b border-gray-200 pb-12">
+                    <div class="md:col-span-3">
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 text-center sticky top-24">
+                            <span class="text-4xl block mb-2">📜</span>
+                            <h4 class="font-bold text-tech-900">1. Topic Selection</h4>
+                        </div>
+                    </div>
+                    <div class="md:col-span-9 space-y-6 text-gray-700 leading-relaxed">
+                        <h3 class="text-2xl font-bold text-tech-900">Project Title: Single Axis Solar Tracker with Automated Speed Breaker</h3>
+                        <p>
+                            In the realm of sustainable engineering, two pressing issues often dominate discussions: the inefficiency of static renewable energy sources and the need for smarter, safer urban infrastructure. Our project was conceived at this intersection.
+                        </p>
+                        <p>
+                            We chose to integrate a <strong>Solar Tracking System</strong>—traditionally used in large solar farms—with a novel application: a <strong>Speed-Sensing Traffic Breaker</strong>. This "hybrid" approach ensures that the power required for the smart traffic system is generated entirely on-site, creating a self-sustaining unit ideal for smart cities and remote highways alike.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2. AIM & OBJECTIVE -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start border-b border-gray-200 pb-12">
+                    <div class="md:col-span-3">
+                        <div class="bg-green-50 p-4 rounded-xl border border-green-100 text-center sticky top-24">
+                            <span class="text-4xl block mb-2">🎯</span>
+                            <h4 class="font-bold text-tech-900">2. Aim & Objectives</h4>
+                        </div>
+                    </div>
+                    <div class="md:col-span-9 space-y-4 text-gray-700 leading-relaxed">
+                        <p>The primary aim was to design a robust, low-cost embedded system that enhances energy harvest efficiency while contributing to public safety.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                <h5 class="font-bold text-eco-600 mb-2">Energy Efficiency</h5>
+                                <p class="text-sm">To increase the photovoltaic (PV) panel's output by <strong>25-30%</strong> compared to static panels by maintaining a perpendicular angle to the sun's rays throughout the day.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                <h5 class="font-bold text-red-600 mb-2">Traffic Safety</h5>
+                                <p class="text-sm">To automate speed breakers so they only deploy for speeding vehicles, reducing wear on compliant vehicles and improving traffic flow.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. COMPONENT ANALYSIS -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start border-b border-gray-200 pb-12">
+                    <div class="md:col-span-3">
+                        <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-100 text-center sticky top-24">
+                            <span class="text-4xl block mb-2">🔌</span>
+                            <h4 class="font-bold text-tech-900">3. Components & Logic</h4>
+                        </div>
+                    </div>
+                    <div class="md:col-span-9">
+                        <p class="text-gray-700 mb-6">The system architecture relies on a closed-loop feedback control system involving sensors, a controller, and actuators.</p>
+                        
+                        <div class="space-y-6">
+                            <!-- LDR Section -->
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <div class="w-full sm:w-1/3">
+                                    <div class="bg-gray-100 h-24 rounded-lg flex items-center justify-center text-2xl">☀️</div>
+                                </div>
+                                <div class="w-full sm:w-2/3">
+                                    <h5 class="font-bold text-tech-900">A. Light Detection (LDRs)</h5>
+                                    <p class="text-sm text-gray-600 mt-1">We utilized two <strong>Light Dependent Resistors (LDRs)</strong> placed on the East and West edges of the panel. They function as variable resistors in a potential divider circuit. When light intensity varies, the voltage drop across them changes, providing an analog signal (0-5V) to the Arduino's comparator logic.</p>
+                                </div>
+                            </div>
+
+                            <!-- Actuation Section -->
+                            <div class="flex flex-col sm:flex-row gap-4 border-t border-gray-100 pt-6">
+                                <div class="w-full sm:w-1/3">
+                                    <div class="bg-gray-100 h-24 rounded-lg flex items-center justify-center text-2xl">⚙️</div>
+                                </div>
+                                <div class="w-full sm:w-2/3">
+                                    <h5 class="font-bold text-tech-900">B. Mechanical Actuation (Servo Motors)</h5>
+                                    <p class="text-sm text-gray-600 mt-1"><strong>SG90 Micro Servos</strong> were chosen for their precise angular control. The primary servo receives PWM signals to tilt the solar panel, ensuring the LDRs receive equal light intensity (equilibrium state). A secondary servo actuates the speed breaker mechanism.</p>
+                                </div>
+                            </div>
+
+                             <!-- Logic Section -->
+                             <div class="flex flex-col sm:flex-row gap-4 border-t border-gray-100 pt-6">
+                                <div class="w-full sm:w-1/3">
+                                    <div class="bg-gray-100 h-24 rounded-lg flex items-center justify-center text-2xl">🧠</div>
+                                </div>
+                                <div class="w-full sm:w-2/3">
+                                    <h5 class="font-bold text-tech-900">C. Control Unit (Arduino Nano)</h5>
+                                    <p class="text-sm text-gray-600 mt-1">The <strong>ATmega328P</strong> based Nano acts as the brain. It constantly samples the LDR values. If <code>|LDR1 - LDR2| > Threshold</code>, it adjusts the servo position. Simultaneously, it monitors the Ultrasonic sensor to calculate vehicle velocity ($v = d/t$).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. CHALLENGES & SOLUTIONS -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start border-b border-gray-200 pb-12">
+                    <div class="md:col-span-3">
+                        <div class="bg-red-50 p-4 rounded-xl border border-red-100 text-center sticky top-24">
+                            <span class="text-4xl block mb-2">🚧</span>
+                            <h4 class="font-bold text-tech-900">4. Problems & Solutions</h4>
+                        </div>
+                    </div>
+                    <div class="md:col-span-9 space-y-6">
+                        <p class="text-gray-700">During the prototyping phase, we encountered several engineering challenges that required iterative problem-solving.</p>
+
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-red-500 shadow-sm">
+                            <h5 class="font-bold text-tech-900 text-lg mb-2">Challenge 1: Parasitic Oscillation (Jitter)</h5>
+                            <p class="text-sm text-gray-600 mb-2"><strong>Issue:</strong> In initial tests, the solar panel would vibrate continuously when light levels were similar on both sides, or due to passing clouds. This "hunting" behavior wasted power and heated up the servo.</p>
+                            <p class="text-sm text-gray-800 bg-red-50 p-2 rounded"><strong>Engineering Solution:</strong> We implemented a software <strong>Hysteresis Loop (Tolerance Band)</strong>. The code logic was updated to only trigger movement if the difference between LDR values exceeded a specific threshold (e.g., 50 units). This created a "dead zone" where the system remains stable.</p>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-orange-500 shadow-sm">
+                            <h5 class="font-bold text-tech-900 text-lg mb-2">Challenge 2: Power Instability</h5>
+                            <p class="text-sm text-gray-600 mb-2"><strong>Issue:</strong> When the servo motors engaged, they drew high current spikes, causing the voltage to drop and the Arduino to reset unexpectedly (Brownout).</p>
+                            <p class="text-sm text-gray-800 bg-orange-50 p-2 rounded"><strong>Engineering Solution:</strong> We designed a <strong>Dual-Rail Power Supply</strong>. The motors were powered by a dedicated 9V high-current source via the L293D driver, while the Arduino was isolated on a regulated 5V rail. We also added decoupling capacitors to filter noise.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. INNOVATION -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <div class="md:col-span-3">
+                        <div class="bg-purple-50 p-4 rounded-xl border border-purple-100 text-center sticky top-24">
+                            <span class="text-4xl block mb-2">💡</span>
+                            <h4 class="font-bold text-tech-900">5. Innovation</h4>
+                        </div>
+                    </div>
+                    <div class="md:col-span-9">
+                        <div class="bg-gradient-to-br from-purple-50 to-white p-6 rounded-2xl border border-purple-200">
+                            <h3 class="text-xl font-bold text-purple-900 mb-4">Smart Integration: The "Eco-Safe" Concept</h3>
+                            <p class="text-gray-700 mb-4">
+                                While solar trackers and speed breakers exist individually, our innovation lies in their <strong>symbiotic integration</strong>.
+                            </p>
+                            <ul class="space-y-4 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-purple-500 mr-2 text-lg">✦</span>
+                                    <span><strong>Zero-Grid Dependency:</strong> By powering the speed breaker's servo motor directly from the tracked solar panel's battery storage, we eliminated the need for external grid connections. This makes the system deployable in remote highway locations.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-purple-500 mr-2 text-lg">✦</span>
+                                    <span><strong>Dynamic Traffic Flow:</strong> Traditional speed breakers are passive obstacles. Our active system uses Ultrasonic logic to differentiate between safe and speeding drivers, "rewarding" compliance with a smooth road surface and "punishing" violations with a physical barrier.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-purple-500 mr-2 text-lg">✦</span>
+                                    <span><strong>Low-Cost Scalability:</strong> By utilizing off-the-shelf components like LDRs instead of complex pyranometers, and simple Ultrasonic sensors instead of radar guns, we achieved a prototype cost under ₹2000, making mass adoption financially viable.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 2. DUAL LOGIC SIMULATOR -->
+        <section id="logic" class="max-w-6xl mx-auto scroll-mt-24">
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="w-1.5 h-10 bg-eco-500 rounded-full"></div>
+                <div>
+                    <h3 class="text-3xl font-bold text-tech-900">System Logic Simulator</h3>
+                    <p class="text-sm text-gray-500">Test both Solar Tracking and Speed Detection logic interactively</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- SOLAR TRACKER SIMULATOR -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-solar-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-solar-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">MODULE 1</div>
+                    <h4 class="font-bold text-tech-900 mb-6 flex items-center">
+                        <span class="text-2xl mr-2">🌻</span> Solar Tracker (LDR)
+                    </h4>
+                    
+                    <div class="space-y-6">
+                        <!-- Inputs -->
+                        <div>
+                            <label class="flex justify-between text-xs font-bold text-gray-500 uppercase mb-1">
+                                <span>LDR 1 Intensity (Left)</span>
+                                <span id="val_L1">500</span>
+                            </label>
+                            <input type="range" id="in_LDR1" min="0" max="1023" value="500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-solar-600" oninput="updateSolarLogic()">
+                        </div>
+                        <div>
+                            <label class="flex justify-between text-xs font-bold text-gray-500 uppercase mb-1">
+                                <span>LDR 2 Intensity (Right)</span>
+                                <span id="val_L2">500</span>
+                            </label>
+                            <input type="range" id="in_LDR2" min="0" max="1023" value="500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-solar-600" oninput="updateSolarLogic()">
+                        </div>
+
+                        <!-- Visual Output -->
+                        <div class="bg-tech-900 h-40 rounded-xl flex items-center justify-center relative">
+                            <div id="solar-panel" class="w-32 h-2 bg-blue-500 transition-transform duration-500 flex justify-center items-center">
+                                <div class="w-full h-full bg-blue-400 opacity-50 grid grid-cols-4 gap-px"></div>
+                            </div>
+                            <div id="solar-status" class="absolute bottom-2 text-xs font-mono text-solar-500">STABLE</div>
+                        </div>
+                        <p class="text-xs text-gray-500 italic">Logic: LM358N Op-Amp compares LDR voltages to drive Gear Motor via L293D.</p>
+                    </div>
+                </div>
+
+                <!-- SPEED BREAKER SIMULATOR -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-eco-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-eco-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">MODULE 2</div>
+                    <h4 class="font-bold text-tech-900 mb-6 flex items-center">
+                        <span class="text-2xl mr-2">🚗</span> Speed Breaker (Ultrasonic)
+                    </h4>
+                    
+                    <div class="space-y-6">
+                        <!-- Inputs -->
+                        <div>
+                            <label class="flex justify-between text-xs font-bold text-gray-500 uppercase mb-1">
+                                <span>Vehicle Speed (km/h)</span>
+                                <span id="val_Speed">20</span>
+                            </label>
+                            <input type="range" id="in_Speed" min="0" max="120" value="20" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-500" oninput="updateSpeedLogic()">
+                        </div>
+                        <div>
+                            <label class="flex justify-between text-xs font-bold text-gray-500 uppercase mb-1">
+                                <span>Speed Limit Set</span>
+                                <span>40 km/h</span>
+                            </label>
+                            <div class="w-full h-1 bg-gray-200 rounded"><div class="w-1/3 h-full bg-green-500"></div></div>
+                        </div>
+
+                        <!-- Visual Output -->
+                        <div class="bg-gray-100 h-40 rounded-xl flex items-end justify-center relative overflow-hidden border-b-4 border-gray-800">
+                            <!-- Road -->
+                            <div class="absolute bottom-0 w-full h-2 bg-gray-800"></div>
+                            <!-- Breaker -->
+                            <div id="breaker" class="w-24 h-2 bg-yellow-500 rounded-t-full transition-all duration-300 transform translate-y-full"></div>
+                            <!-- Car (Visual only) -->
+                            <div class="absolute top-4 right-4 text-2xl">🚘</div>
+                            
+                            <div id="speed-status" class="absolute top-2 left-2 text-xs font-bold text-green-600 bg-white px-2 py-1 rounded shadow">SAFE SPEED</div>
+                        </div>
+                        <p class="text-xs text-gray-500 italic">Logic: Arduino reads Ultrasonic sensor distance/time. If speed > limit, Servo raises breaker.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3. COMPONENTS (Updated with User Images) -->
+        <section id="components" class="max-w-6xl mx-auto scroll-mt-24">
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="w-1.5 h-10 bg-eco-500 rounded-full"></div>
+                <div>
+                    <h3 class="text-3xl font-bold text-tech-900">Hardware Components</h3>
+                    <p class="text-sm text-gray-500">Actual Prototype Images</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Solar Tracker Image -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-solar-100">
+                     <h4 class="font-bold text-tech-900 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🌻</span> Solar Tracker Hardware
+                    </h4>
+                    <div class="mb-4 rounded-lg overflow-hidden border border-gray-100 h-64 flex items-center justify-center bg-gray-50">
+                        <img src="solar_tracker_prototype.jpg" alt="Solar Tracker Prototype" class="max-h-full object-contain">
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li class="flex items-center"><span class="w-2 h-2 bg-solar-500 rounded-full mr-2"></span>Uses 2x LDRs for light sensing</li>
+                        <li class="flex items-center"><span class="w-2 h-2 bg-solar-500 rounded-full mr-2"></span>Servo motor for panel rotation</li>
+                    </ul>
+                </div>
+
+                 <!-- Speed Breaker Image -->
+                 <div class="bg-white p-6 rounded-2xl shadow-lg border border-eco-100">
+                     <h4 class="font-bold text-tech-900 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🚗</span> Speed Breaker Hardware
+                    </h4>
+                    <div class="mb-4 rounded-lg overflow-hidden border border-gray-100 h-64 flex items-center justify-center bg-gray-50">
+                        <img src="speed_breaker_prototype.jpg" alt="Speed Breaker Prototype" class="max-h-full object-contain">
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li class="flex items-center"><span class="w-2 h-2 bg-eco-500 rounded-full mr-2"></span>Ultrasonic sensor for speed detection</li>
+                        <li class="flex items-center"><span class="w-2 h-2 bg-eco-500 rounded-full mr-2"></span>Servo mechanism raises/lowers barrier</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 4. CIRCUIT DIAGRAM EXPLANATION -->
+        <section id="circuit" class="max-w-6xl mx-auto scroll-mt-24">
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="w-1.5 h-10 bg-eco-500 rounded-full"></div>
+                <div>
+                    <h3 class="text-3xl font-bold text-tech-900">Circuit Explanation</h3>
+                    <p class="text-sm text-gray-500">Detailed Connection Logic</p>
+                </div>
+            </div>
+
+             <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    
+                    <!-- Connection Steps -->
+                    <div class="space-y-6">
+                        <h4 class="font-bold text-lg text-tech-900 border-b pb-2">Connection Steps</h4>
+                        <ol class="list-decimal list-inside space-y-4 text-sm text-gray-700">
+                            <li class="pl-2"><strong>Input Power:</strong> A 9V DC source powers the entire control circuit.</li>
+                            <li class="pl-2"><strong>Signal Processing:</strong> This source connects to an <span class="font-bold text-blue-600">LM358N IC</span>, which acts as a dual operational amplifier.</li>
+                            <li class="pl-2"><strong>Motor Drive:</strong> The Op-Amp output pin acts as the input trigger for the motor driver.</li>
+                            <li class="pl-2"><strong>Actuation:</strong> The motor driver connects directly to the DC gear motor for panel rotation.</li>
+                            <li class="pl-2"><strong>Sensors:</strong> Two LDRs are connected in series with two fixed resistors. Each LDR is paired with one resistor.</li>
+                            <li class="pl-2"><strong>Divider Logic:</strong> This arrangement forms a <em>voltage divider circuit</em>. The voltage at the middle point varies with light intensity.</li>
+                             <li class="pl-2"><strong>Indicators:</strong> 
+                                <ul class="list-disc list-inside pl-6 mt-1 space-y-1 text-xs text-gray-500">
+                                    <li>Blue LED (Beside Solar): Indicates solar panel is active.</li>
+                                    <li>Two Bottom LEDs: Indicate orientation (Left/Right movement).</li>
+                                </ul>
+                            </li>
+                             <li class="pl-2"><strong>Charging Control:</strong> A <span class="font-bold text-purple-600">MOSFET</span> acts as a switch/channel between two capacitors, allowing them to charge only when sufficient light falls on the solar panel.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Visual Diagram -->
+                    <div class="bg-tech-900 rounded-xl p-6 relative overflow-hidden flex items-center justify-center min-h-[400px]">
+                        <div class="relative w-full h-full">
+                             <!-- VCC -->
+                             <div class="absolute top-4 left-4 text-red-500 font-bold text-xs">9V VCC</div>
+                             <div class="absolute top-4 right-4 text-gray-500 font-bold text-xs">GND</div>
+                             
+                             <!-- LDR Divider -->
+                             <div class="absolute top-16 left-10 flex flex-col items-center">
+                                 <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-[10px] font-bold shadow">LDR</div>
+                                 <div class="h-8 w-0.5 bg-gray-500"></div>
+                                 <div class="w-3 h-6 bg-gray-400 border border-gray-600"></div> <!-- Resistor -->
+                                 <div class="h-8 w-0.5 bg-gray-500"></div>
+                                 <span class="text-[10px] text-white">GND</span>
+                             </div>
+                             
+                             <!-- LM358 -->
+                             <div class="absolute top-24 left-[40%] w-24 h-16 bg-gray-800 border border-gray-500 rounded flex items-center justify-center text-white text-xs font-bold">
+                                LM358N
+                             </div>
+                             
+                             <!-- Connection Lines -->
+                             <div class="circuit-line h-0.5 w-24 bg-green-400 absolute top-28 left-20"></div>
+
+                             <!-- Motor Driver -->
+                             <div class="absolute top-24 right-10 w-24 h-16 bg-gray-800 border border-gray-500 rounded flex items-center justify-center text-white text-xs font-bold">
+                                Driver
+                             </div>
+                             
+                             <!-- Signal Line -->
+                             <div class="circuit-line h-0.5 w-16 bg-blue-400 absolute top-32 left-[58%]"></div>
+
+                             <!-- Motor -->
+                             <div class="absolute bottom-10 right-20 w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center shadow-lg text-white text-[10px] font-bold">
+                                MOTOR
+                             </div>
+                             <div class="circuit-line w-0.5 h-16 bg-red-500 absolute top-40 right-24"></div>
+
+                             <!-- MOSFET Area -->
+                             <div class="absolute bottom-10 left-10 w-20 h-12 bg-purple-900 border border-purple-500 rounded flex items-center justify-center text-white text-[10px]">
+                                MOSFET
+                             </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </section>
+
+        <!-- 5. TEAM SECTION -->
+        <section id="team" class="max-w-6xl mx-auto scroll-mt-24 pb-12">
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="w-1.5 h-10 bg-eco-500 rounded-full"></div>
+                <div>
+                    <h3 class="text-3xl font-bold text-tech-900">Team Innovators</h3>
+                    <p class="text-sm text-gray-500">Mentored by Dr. Supriyo Das</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Member Cards -->
+                <div class="bg-white p-4 rounded-xl border border-gray-200 text-center hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-xl">👨‍🎓</div>
+                    <h5 class="font-bold text-sm text-tech-900">Yuvraj Singh</h5>
+                    <p class="text-xs text-gray-500">2023UGEE029</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-200 text-center hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-xl">👨‍🎓</div>
+                    <h5 class="font-bold text-sm text-tech-900">Mayank Raj</h5>
+                    <p class="text-xs text-gray-500">2023UGEE025</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-200 text-center hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-xl">👨‍🎓</div>
+                    <h5 class="font-bold text-sm text-tech-900">Nikhil Kumar</h5>
+                    <p class="text-xs text-gray-500">2023UGEE031</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-200 text-center hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-xl">👨‍🎓</div>
+                    <h5 class="font-bold text-sm text-tech-900">Sumant Nanda</h5>
+                    <p class="text-xs text-gray-500">2023UGEE069</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-200 text-center hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-xl">👨‍🎓</div>
+                    <h5 class="font-bold text-sm text-tech-900">Shivam Kumar</h5>
+                    <p class="text-xs text-gray-500">2023UGEE090</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-200 text-center hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-xl">👨‍🎓</div>
+                    <h5 class="font-bold text-sm text-tech-900">Rishav Raj</h5>
+                    <p class="text-xs text-gray-500">2023UGEE034</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-200 text-center hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-xl">👨‍🎓</div>
+                    <h5 class="font-bold text-sm text-tech-900">Sidharth Kumar</h5>
+                    <p class="text-xs text-gray-500">2023UGEE092</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-gray-200 text-center hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-2 flex items-center justify-center text-xl">👨‍🎓</div>
+                    <h5 class="font-bold text-sm text-tech-900">Anjani Kumar</h5>
+                    <p class="text-xs text-gray-500">2023UGEE113</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-tech-900 text-gray-400 py-12 text-center text-sm border-t border-gray-800">
+        <p class="mb-2">&copy; 2025 Electrical Engineering Dept, NIT Jamshedpur</p>
+        <p class="text-xs text-gray-600">Based on Final Project Report "PPPPDDFF.pdf"</p>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // --- 1. SOLAR TRACKER LOGIC ---
+        function updateSolarLogic() {
+            const el1 = document.getElementById('in_LDR1');
+            const el2 = document.getElementById('in_LDR2');
+            
+            if (!el1 || !el2) return; // Guard clause
+
+            const ldr1 = parseInt(el1.value);
+            const ldr2 = parseInt(el2.value);
+            
+            // UI Updates
+            const valL1 = document.getElementById('val_L1');
+            const valL2 = document.getElementById('val_L2');
+            if (valL1) valL1.innerText = ldr1;
+            if (valL2) valL2.innerText = ldr2;
+            
+            const panel = document.getElementById('solar-panel');
+            const status = document.getElementById('solar-status');
+            const diff = ldr1 - ldr2;
+
+            if (!panel || !status) return;
+
+            if (Math.abs(diff) < 50) { // Tolerance band
+                panel.style.transform = "rotate(0deg)";
+                status.innerText = "STABLE (Balanced)";
+                status.className = "absolute bottom-2 text-xs font-mono text-green-400";
+            } else if (diff > 0) {
+                // Left is brighter
+                panel.style.transform = "rotate(-20deg)";
+                status.innerText = "TRACKING LEFT";
+                status.className = "absolute bottom-2 text-xs font-mono text-yellow-400 animate-pulse";
+            } else {
+                // Right is brighter
+                panel.style.transform = "rotate(20deg)";
+                status.innerText = "TRACKING RIGHT";
+                status.className = "absolute bottom-2 text-xs font-mono text-yellow-400 animate-pulse";
+            }
+        }
+
+        // --- 2. SPEED BREAKER LOGIC ---
+        function updateSpeedLogic() {
+            const elSpeed = document.getElementById('in_Speed');
+            if (!elSpeed) return; // Guard clause
+
+            const speed = parseInt(elSpeed.value);
+            const limit = 40;
+            
+            // UI Updates
+            const valSpeed = document.getElementById('val_Speed');
+            if (valSpeed) valSpeed.innerText = speed;
+            
+            const breaker = document.getElementById('breaker');
+            const status = document.getElementById('speed-status');
+
+            if (!breaker || !status) return;
+
+            if (speed > limit) {
+                // Overspeeding -> Raise Breaker
+                breaker.classList.remove('translate-y-full');
+                breaker.classList.add('translate-y-0'); // Raise
+                status.innerText = "OVERSPEEDING! (Breaker UP)";
+                status.className = "absolute top-2 left-2 text-xs font-bold text-red-600 bg-white px-2 py-1 rounded shadow animate-pulse";
+            } else {
+                // Safe Speed -> Lower Breaker
+                breaker.classList.add('translate-y-full'); // Lower
+                breaker.classList.remove('translate-y-0');
+                status.innerText = "SAFE SPEED (Breaker DOWN)";
+                status.className = "absolute top-2 left-2 text-xs font-bold text-green-600 bg-white px-2 py-1 rounded shadow";
+            }
+        }
+
+        // --- 3. COMPONENT DETAILS (From PDF) ---
+        const details = {
+            'power': {
+                title: 'Power Supply Unit',
+                func: 'Harvests and regulates power.',
+                reason: 'To make the system standalone and eco-friendly.',
+                work: 'Uses 4V Solar Panel to charge 9V Battery. 7805 Regulator provides stable 5V for Arduino.'
+            },
+            'control': {
+                title: 'Control Unit',
+                func: 'Signal processing and decision making.',
+                reason: 'Core intelligence for tracking and speed sensing.',
+                work: 'LM358N (Op-Amp) compares LDR voltages. Arduino reads Ultrasonic sensor data for speed detection.'
+            },
+            'drive': {
+                title: 'Motor Driver & Actuators',
+                func: 'Mechanical movement control.',
+                reason: 'To physically move the panel and the speed breaker.',
+                work: 'L293D drives the Gear Motor for the solar panel. Servo Motor actuates the Speed Breaker mechanism.'
+            },
+            'sensor': {
+                title: 'Sensor Array',
+                func: 'Environment detection.',
+                reason: 'Detects sunlight direction and vehicle speed.',
+                work: '2x LDRs for light intensity differential. Ultrasonic Sensor for measuring time-of-flight to calculate vehicle speed.'
+            }
+        };
+
+        function loadDetail(key) {
+            const data = details[key];
+            const container = document.getElementById('detail-content');
+            if (!container) return;
+            
+            container.innerHTML = `
+                <div class="animate-fade-in">
+                    <h4 class="text-2xl font-bold text-white mb-2">${data.title}</h4>
+                    <div class="h-1 w-12 bg-eco-500 mb-6 rounded"></div>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white/10 p-3 rounded-lg">
+                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Function</div>
+                            <p class="text-sm text-gray-100">${data.func}</p>
+                        </div>
+                        <div class="bg-white/10 p-3 rounded-lg">
+                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Reason</div>
+                            <p class="text-sm text-gray-100">${data.reason}</p>
+                        </div>
+                        <div class="bg-eco-500/20 p-3 rounded-lg border border-eco-500/30">
+                            <div class="text-[10px] font-bold text-eco-400 uppercase tracking-widest mb-1">Implementation</div>
+                            <p class="text-sm text-white italic">"${data.work}"</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initial Call
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSolarLogic();
+            updateSpeedLogic();
+        });
+
+        // Expose functions globally to prevent ReferenceErrors
+        window.updateSolarLogic = updateSolarLogic;
+        window.updateSpeedLogic = updateSpeedLogic;
+        window.loadDetail = loadDetail;
+    </script>
+</body>
+</html>
